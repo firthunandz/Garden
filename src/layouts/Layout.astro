@@ -1,0 +1,40 @@
+---
+import Nav from '../components/Nav.astro';
+import GardenFooter from '../components/GardenFooter.astro';
+import '../styles/global.css';
+
+// Fonts
+import '@fontsource/source-serif-4/400.css';
+import '@fontsource/source-serif-4/500.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+
+interface Props {
+	title: string;
+  description?: string;
+}
+
+const { title, description = "A personal trading/learning journal documenting a long-term journey of learning and personal growth." } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title} | Garden</title>
+    <meta name="description" content={description} />
+	</head>
+	<body class="flex flex-col min-h-screen">
+    <div class="flex flex-col min-h-screen w-full max-w-5xl mx-auto px-6">
+      <Nav />
+      <main class="flex-grow py-12">
+        <slot />
+      </main>
+      <GardenFooter />
+    </div>
+	</body>
+</html>

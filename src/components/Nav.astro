@@ -1,0 +1,25 @@
+---
+const base = import.meta.env.BASE_URL;
+const navItems = [
+  { label: 'writing', href: `${base}writing` },
+  { label: 'now', href: `${base}now` },
+  { label: 'about', href: `${base}about` },
+];
+---
+
+<nav class="flex items-center justify-between pt-8 w-full">
+  <a href={base} class="text-xl font-serif lowercase tracking-tight hover:text-accent-cyan">
+    firthunandz
+  </a>
+  
+  <div class="flex gap-8">
+    {navItems.map(item => (
+      <a 
+        href={item.href} 
+        class="text-sm font-sans lowercase text-text-secondary hover:text-text-primary transition-colors"
+      >
+        {item.label}
+      </a>
+    ))}
+  </div>
+</nav>

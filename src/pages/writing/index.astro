@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import JournalCard from '../../components/JournalCard.astro';
+
+const allEntries = await getCollection('journal', ({ data }) => {
+  return data.draft !== true;
+});
+
+const sortedEntries = allEntries.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Layout title="Writing" description="A collection of thoughts on trading, systems, and learning.">
+  <header class="mb-16">
+    <h1 class="text-4xl font-serif mb-4">Writing</h1>
+    <p class="text-text-secondary font-sans max-w-2xl">
+      A collection of long-form reflections on the process of learning to trade, building systems, and finding consistency in an uncertain environment.
+    </p>
+  </header>
+
+  <div class="grid gap-2">
+    {sortedEntries.map((entry) => (
+      <JournalCard 
+        title={entry.data.title}
+        description={entry.data.description}
+        date={entry.data.date}
+        href={`${base}writing/${entry.id}`}
+      />
+    ))}
+  </div>
+</Layout>

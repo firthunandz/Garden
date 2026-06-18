@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MarketStructureLine from '../components/MarketStructureLine.astro';
+
+const lastUpdated = "June 17, 2026";
+---
+
+<Layout title="Now" description="What I'm currently focused on.">
+  <article class="max-w-2xl mx-auto">
+    <header class="mb-12">
+      <h1 class="text-4xl font-serif mb-4">Now</h1>
+      <p class="text-text-tertiary text-xs font-sans lowercase tracking-widest">
+        last updated: {lastUpdated}
+      </p>
+    </header>
+
+    <div class="prose text-text-secondary">
+      <p>
+        This is a "now" page, inspired by <a href="https://sivers.org/nowff" target="_blank" rel="noopener noreferrer" class="text-accent-bright hover:underline">Derek Sivers</a>. It's a snapshot of my current focus.
+      </p>
+
+      <h2>Trading</h2>
+      <p>
+        I am currently refining my execution on the 15-minute timeframe, focusing specifically on high-probability reversals at key supply and demand zones. I'm working on reducing my trade frequency and increasing my strike rate.
+      </p>
+
+      <h2>Building</h2>
+      <p>
+        This site is my current focus. I'm building "Garden" as a place to think in public and hold myself accountable to my learning goals. I'm also exploring automated backtesting tools using Python and some proprietary data sets.
+      </p>
+
+      <h2>Learning</h2>
+      <p>
+        Deep-diving into market auction theory and psychological resilience. Reading <em>The Daily Stoic</em> by Ryan Holiday to help maintain emotional neutrality during volatile sessions.
+      </p>
+
+      <MarketStructureLine variant="divider" class="h-4 w-full my-12 opacity-30" />
+      
+      <p class="text-sm italic">
+        Currently based in a quiet corner of the internet, building for the long term.
+      </p>
+    </div>
+  </article>
+</Layout>

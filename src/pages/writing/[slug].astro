@@ -1,0 +1,103 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import MarketStructureLine from '../../components/MarketStructureLine.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('journal');
+  return entries.map(entry => ({
+    params: { slug: entry.id }, props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const formattedDate = entry.data.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const base = import.meta.env.BASE_URL;
+
+// Fetch all for navigation
+const allEntries = await getCollection('journal', ({ data }) => data.draft !== true);
+const sortedEntries = allEntries.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const currentIndex = sortedEntries.findIndex(e => e.id === entry.id);
+const nextEntry = sortedEntries[currentIndex - 1];
+const prevEntry = sortedEntries[currentIndex + 1];
+---
+
+<Layout title={entry.data.title} description={entry.data.description}>
+  <article class="max-w-2xl mx-auto">
+    <header class="mb-12">
+      <a href={`${base}writing`} class="text-xs font-sans text-accent-bright hover:text-accent-cyan mb-8 inline-block lowercase transition-colors">
+        &larr; back to writing
+      </a>
+      
+      <h1 class="text-4xl md:text-5xl font-serif mb-6 leading-tight">
+        {entry.data.title}
+      </h1>
+      
+      <div class="flex flex-wrap items-center gap-4 text-xs font-sans text-text-tertiary lowercase tracking-widest">
+        <time datetime={entry.data.date.toISOString()}>{formattedDate}</time>
+        {entry.data.tags && entry.data.tags.map(tag => (
+          <span class="px-2 py-0.5 bg-bg-surface rounded-sm text-text-secondary">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </header>
+
+    <div class="prose prose-invert prose-serif max-w-none text-text-secondary leading-relaxed">
+      <Content />
+    </div>
+
+    <footer class="mt-20 pt-12 border-t border-border">
+      <MarketStructureLine variant="divider" class="h-4 w-full mb-12 opacity-30" />
+      
+      <div class="flex justify-between gap-8">
+        {prevEntry ? (
+          <a href={`${base}writing/${prevEntry.id}`} class="group max-w-[45%]">
+            <span class="block text-xs font-sans text-text-tertiary lowercase mb-2">previous</span>
+            <span class="block text-sm font-serif text-text-primary group-hover:text-accent-primary transition-colors">
+              {prevEntry.data.title}
+            </span>
+          </a>
+        ) : <div />}
+
+        {nextEntry ? (
+          <a href={`${base}writing/${nextEntry.id}`} class="group max-w-[45%] text-right">
+            <span class="block text-xs font-sans text-text-tertiary lowercase mb-2">next</span>
+            <span class="block text-sm font-serif text-text-primary group-hover:text-accent-primary transition-colors">
+              {nextEntry.data.title}
+            </span>
+          </a>
+        ) : <div />}
+      </div>
+    </footer>
+  </article>
+</Layout>
+
+<style is:global>
+  /* Basic prose styles since we aren't using @tailwindcss/typography */
+  .prose p {
+    margin-bottom: 1.8em;
+    font-size: 1.125rem;
+  }
+  .prose h2 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-primary);
+  }
+  .prose blockquote {
+    border-left: 2px solid var(--color-accent-primary);
+    padding-left: 1.5rem;
+    font-style: italic;
+    color: var(--color-text-secondary);
+    margin: 2rem 0;
+  }
+</style>

@@ -1,0 +1,51 @@
+---
+interface Props {
+  class?: string;
+  variant?: 'hero' | 'divider';
+}
+
+const { class: className, variant = 'hero' } = Astro.props;
+
+// Different paths for variation
+const paths = {
+  hero: "M0,60 Q15,55 25,40 T45,30 T65,15 T85,25 T110,5 T140,15",
+  divider: "M0,10 Q50,5 100,10 Q150,15 200,10"
+};
+
+const path = variant === 'hero' ? paths.hero : paths.divider;
+const viewBox = variant === 'hero' ? "0 0 150 70" : "0 0 200 20";
+---
+
+<div class:list={["pointer-events-none select-none overflow-visible", className]}>
+  <svg 
+    viewBox={viewBox} 
+    preserveAspectRatio="none" 
+    class="w-full h-full"
+    aria-hidden="true"
+  >
+    <path 
+      d={path} 
+      fill="none" 
+      stroke="currentColor" 
+      stroke-width="0.5" 
+      class="text-accent-primary opacity-40"
+    />
+    
+    {variant === 'hero' && (
+      <>
+        {/* Swing points / highlight dots */}
+        <circle cx="45" cy="30" r="1" class="fill-accent-bright animate-pulse" />
+        <circle cx="85" cy="25" r="1" class="fill-accent-bright" />
+        <circle cx="110" cy="5" r="1.5" class="fill-accent-cyan" />
+      </>
+    )}
+  </svg>
+</div>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    .animate-pulse {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import MarketStructureLine from '../components/MarketStructureLine.astro';
+import JournalCard from '../components/JournalCard.astro';
+
+const allEntries = await getCollection('journal', ({ data }) => {
+  return data.draft !== true;
+});
+
+const recentEntries = allEntries
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Layout title="Home">
+  {/* Hero Section */}
+  <section class="relative py-6 md:py-10 overflow-hidden">
+    <div class="relative z-10">
+      <span class="text-xs font-sans lowercase text-text-tertiary tracking-widest block mb-4">
+        trader · developer · builder
+      </span>
+      <h1 class="text-4xl md:text-6xl font-serif leading-tight mb-8 max-w-3xl">
+        Documenting the journey toward consistency.
+      </h1>
+      <p class="text-lg text-text-secondary max-w-xl font-sans leading-relaxed">
+        A public journal exploring the intersections of market structure, 
+        systems thinking, and the discipline of long-term growth.
+      </p>
+    </div>
+
+    {/* Background Motif */}
+    <div class="absolute top-1/2 -right-20 -translate-y-1/2 w-[600px] h-[300px] -rotate-12 opacity-50">
+      <MarketStructureLine variant="hero" class="w-full h-full" />
+    </div>
+  </section>
+
+  {/* Recent Writing */}
+  <section class="mt-6 md:mt-12">
+    <div class="flex justify-between items-end mb-12">
+      <h2 class="text-2xl font-serif">Recent writing</h2>
+      <a href={`${base}writing`} class="text-sm font-sans text-accent-bright hover:text-accent-cyan transition-colors lowercase">
+        all writing &rarr;
+      </a>
+    </div>
+
+    <div class="grid gap-2">
+      {recentEntries.map((entry) => (
+        <JournalCard 
+          title={entry.data.title}
+          description={entry.data.description}
+          date={entry.data.date}
+          href={`${base}writing/${entry.id}`}
+        />
+      ))}
+    </div>
+  </section>
+</Layout>
