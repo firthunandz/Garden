@@ -41,7 +41,7 @@ const base = import.meta.env.BASE_URL;
   <section class="mt-6 md:mt-12">
     <div class="flex justify-between items-end mb-12">
       <h2 class="text-2xl font-serif">Recent writing</h2>
-      <a href={`${base}writing`} class="text-sm font-sans text-accent-bright hover:text-accent-cyan transition-colors lowercase">
+      <a href={`${base}/writing`} class="text-sm font-sans text-accent-bright hover:text-accent-cyan transition-colors lowercase">
         all writing &rarr;
       </a>
     </div>
@@ -52,7 +52,7 @@ const base = import.meta.env.BASE_URL;
           title={entry.data.title}
           description={entry.data.description}
           date={entry.data.date}
-          href={`${base}writing/${entry.id}`}
+          href={`${base}/writing/${entry.id}`}
         />
       ))}
     </div>
